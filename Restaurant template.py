@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher, F, types
 
 # ----------- Конфигурация -----------
 BOT_TOKEN = "BOT_TOKEN"
-ADMIN_CHAT_ID = "ADMIN_USER_TG_ID"  # твой Telegram ID для уведомлений
+ADMIN_CHAT_ID = "5567849989"  # твой Telegram ID для уведомлений
 
 # ----------- Логирование -----------
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +23,24 @@ MENU = {
 
 
 
+# ----------- Обработка любых других сообщений -----------
+@dp.message()  # ловим все сообщения
+async def unknown_message(message: types.Message):
+    # Можно просто уведомить пользователя
+    await message.answer(
+        "❌ Извините, я не понял ваш запрос.\n"
+        +
+        "Пожалуйста, выберите товар из меню ниже."
+    )
+
+    # Покажем снова меню
+    keyboard = types.InlineKeyboardMarkup(
+        inline_keyboard=[
+            [types.InlineKeyboardButton(text=f"{item} - {price}₽", callback_data=f"order_{item}")]
+            for item, price in MENU.items()
+        ]
+    )
+    await message.answer("Выберите товар:", reply_markup=keyboard)
 
 # ----------- /start -----------
 @dp.message(F.text == "/start")
@@ -54,26 +72,6 @@ async def handle_order(callback: types.CallbackQuery):
 
     # Ответ на callback, чтобы убрать "часики" у кнопки
     await callback.answer()
-
-# ----------- Обработка любых других сообщений -----------
-@dp.message()  # ловим все сообщения
-async def unknown_message(message: types.Message):
-    # Можно просто уведомить пользователя
-    await message.answer(
-        "❌ Извините, я не понял ваш запрос.\n"
-        +
-        "Пожалуйста, выберите товар из меню ниже."
-    )
-
-    # Покажем снова меню
-    keyboard = types.InlineKeyboardMarkup(
-        inline_keyboard=[
-            [types.InlineKeyboardButton(text=f"{item} - {price}₽", callback_data=f"order_{item}")]
-            for item, price in MENU.items()
-        ]
-    )
-    await message.answer("Выберите товар:", reply_markup=keyboard)
-
 
 # ----------- Запуск бота -----------
 async def main():
