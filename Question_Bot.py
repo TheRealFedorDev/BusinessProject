@@ -10,7 +10,7 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKe
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 # Настройки
-API_TOKEN = "8511295355:AAERVtV2oHMlVuo8aXR2GUTQ5bNsTl-lLek"
+API_TOKEN = "BOT_TOKEN"
 
 # Инициализация
 logging.basicConfig(level=logging.INFO)
